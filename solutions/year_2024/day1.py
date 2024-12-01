@@ -1,35 +1,27 @@
+from collections import Counter
 
-def part1(input): 
-    l0s = []
-    l1s = []
-    for line in input.split("\n"):
-        nums = line.strip().split(" ")
-        location0 = int(nums[0])
-        location1 = int(nums[3])
-        # print(location0, location1)
-        l0s.append(location0)
-        l1s.append(location1)
-    
-    # now got two lists
 
-    l0s = sorted(l0s)
-    l1s = sorted(l1s)
+def get_nums_from_line(line: str):
+    parts = line.strip().split(" ")
+    return int(parts[0]), int(parts[3])
 
-    return sum(map(lambda pair: abs(pair[0] - pair[1]), zip(l0s, l1s)))
 
-def part2(input):
-    l0s = []
-    l1dict = {}
-    for line in input.split("\n"):
-        nums = line.strip().split(" ")
-        location0 = int(nums[0])
-        location1 = int(nums[3])
-        # print(location0, location1)
-        l0s.append(location0)
+def get_lists_from_input(input: str):
+    return zip(*map(get_nums_from_line, input.splitlines()))
 
-        if location1 in l1dict:
-            l1dict[location1] += 1
-        else:
-            l1dict[location1] = 1
-    
-    return sum(map(lambda loc: loc * l1dict.get(loc, 0), l0s))
+
+def part1(input):
+    locations1, locations2 = get_lists_from_input(input)
+
+    locations1 = sorted(locations1)
+    locations2 = sorted(locations2)
+
+    return sum(map(lambda pair: abs(pair[0] - pair[1]), zip(locations1, locations2)))
+
+
+def part2(input: str):
+    locations1, locations2 = get_lists_from_input(input)
+
+    locations2_counts = Counter(locations2)
+
+    return sum(map(lambda loc: loc * locations2_counts.get(loc, 0), locations1))
