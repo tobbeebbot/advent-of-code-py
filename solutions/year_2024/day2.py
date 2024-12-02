@@ -1,33 +1,29 @@
-
-def is_safe_increasing(nums):
-    length = len(nums)
-    if length == 2:
-        return 1 <= (nums[1] - nums[0]) <= 3
-    if length == 1:
-        return True
-    else:
-        return is_safe_increasing(nums[:length // 2 + 1]) and is_safe_increasing(nums[length//2:])
+import itertools as it
 
 
-def is_safe(nums):
-    return is_safe_increasing(nums) or is_safe_increasing(list(reversed(nums)))
+def is_safe_increasing(report):
+    return all(map(lambda pair: 1 <= pair[0] - pair[1] <= 3, it.pairwise(report)))
 
 
-def part1(input:str):
-    count = 0
-    for line in input.splitlines():
-        report = list(map(int, line.split()))
-        safe = is_safe((report))
-        count += safe
-    return count
+def is_safe_decreasing(report):
+    return is_safe_increasing(reversed(report))
+
+
+def is_safe(report):
+    return is_safe_increasing(report) or is_safe_decreasing(report)
+
+
+def is_altered_safe(report):
+    return any(map(is_safe, it.combinations(report, len(report) - 1)))
+
+
+def into_report(line):
+    return list(map(int, line.split()))
+
+
+def part1(input: str):
+    return sum(1 for _ in filter(is_safe, map(into_report, input.splitlines())))
+
 
 def part2(input):
-    count = 0
-    for line in input.splitlines():
-        report = list(map(int, line.split()))
-        for i, _ in enumerate(report):
-            if is_safe(report[:i] + report[i + 1:]):
-                count += 1
-                break
-            
-    return count
+    return sum(1 for _ in filter(is_altered_safe, map(into_report, input.splitlines())))
