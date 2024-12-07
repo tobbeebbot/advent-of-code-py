@@ -33,3 +33,15 @@ def test_equation_check():
     answer = 292
     equation = [11, 6, 16, 20]
     assert day7.check_equation(answer, equation) == True
+
+
+def test_equation_check2():
+    answer = 156
+    equation = [15, 6]
+    assert day7.check_equation2(answer, equation) == True
+    answer = 7290
+    equation = [6, 8, 6, 15]
+    assert day7.check_equation2(answer, equation) == True
+    answer = 192
+    equation = [17, 8, 14]
+    assert day7.check_equation2(answer, equation) == True
